@@ -22,7 +22,7 @@
         </div>
 
         <div class="input-group date col-3" id="datetimepicker" data-target-input="nearest"> 
-            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker"> 
+            <input type="text" class="form-control datetimepicker-input todo-end" data-target="#datetimepicker"> 
             <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker"> 
                 <div class="input-group-text">
                     <i class="fa fa-calendar"></i>
@@ -34,6 +34,13 @@
             <button type="button" class="btn btn-outline-primary todo-add">ADD</button>
         </div>
     </div>
+
+    <div class="input-group mb-3">
+        <input type="text" class="form-control todo-search" placeholder="검색하기" >
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary search-btn" type="button">검색</button>
+        </div>
+      </div>
 
     <div class="list-wrapper">
         <ul class="list-group">

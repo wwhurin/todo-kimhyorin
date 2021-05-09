@@ -56,7 +56,7 @@ router.post("/todo", (req, res) => {
     
     models.todo_list.create({
         name: body.name
-        , wrt_date: body.wrt_date
+        , wrt_date: today.format('YYYY-MM-DD')
         , end_date: body.end_date
     })
     .then( result => {
@@ -158,6 +158,47 @@ router.delete("/todo/:id", (req, res) => {
       .catch( err => {
         ok = false;
         msg = "데이터 삭제 실패";
+        console.log(err)
+        return res.json({
+            ok
+            , msg
+        });
+    });
+    
+});
+
+//todo name edit
+router.put("/todo/end/:id", (req, res) => {
+    let params = req.params;
+    let body = req.body;
+
+    let ok = true, msg = '';
+    
+    if(!params.id){
+        msg = 'todo를 받아오지 못했습니다.';
+        ok = false;
+        return res.json({
+            ok
+            , msg
+        });
+    }
+
+    models.todo_list.update({
+        end_flag: body.end_flag
+        , edit_date: today.format('YYYY-MM-DD')
+    },{
+        where: {id: params.id}
+    })
+      .then( result => {
+        msg = "데이터 수정 완료";
+        return res.json({
+            ok
+            , msg
+        });
+    })
+      .catch( err => {
+        ok = false;
+        msg = "데이터 수정 실패";
         console.log(err)
         return res.json({
             ok

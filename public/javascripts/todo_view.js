@@ -1,15 +1,39 @@
+let LIST = null;
+
 const btnHandler = () => {
     //input으로 바꿀 경우 true, 다시 text일 경우 false
     let editType = true;
 
     const btnAdd = $('.todo-add');
+    const btnSearch = $('.search-btn');
+
+    //검색 이벤트 ========================================================
+    btnSearch.click(function() {
+        console.log("search")
+        search();
+    });
 
     //등록 이벤트 ========================================================
     btnAdd.click(function() {
         const name = $('.todo-new').val();
+        let dateStr = $('.todo-end').val();
 
         if(!name){
             alert("TODO 이름을 입력해주세요.");
+            return;
+        }
+
+        if(!dateStr){
+            alert("종료 날짜를 입력해주세요.");
+            return;
+        }
+        
+        try{
+            const dateArr = dateStr.split('/');
+            dateStr = dateArr[2] + "-" + dateArr[0] + "-" + dateArr[1];
+            //TODO: 날짜 유효성 검사
+        }catch(e){
+            alert('날짜 형식이 맞지 않습니다.');
             return;
         }
 
@@ -21,8 +45,7 @@ const btnHandler = () => {
             type: 'POST',
             data: {
                 name: name
-                , wrt_date: '2021-05-09'
-                , end_date: '2021-05-09'
+                , end_date: dateStr
             },
             success: function(result) {
                 console.log(result);
@@ -31,6 +54,7 @@ const btnHandler = () => {
                     return;
                 }
                 //다시 그리기
+                getList();
             }
             , fail: function(err){
                 console.log(err);
@@ -112,7 +136,7 @@ const btnHandler = () => {
                 }
 
                 alert('TODO가 삭제되었습니다.');
-                
+
                 //다시 그리기
                 getList();
             }
@@ -120,8 +144,40 @@ const btnHandler = () => {
                 console.log(err);
             }
         });
+    });
 
-        //다시 그리기
+    //체크 시 완료로 변경 이벤트 ========================================================
+    $(document).on('click', '.todo-ck', function() {
+        const id = $(this).closest('.todo-item').data('id');
+        let todoCk = $(this).is(":checked");
+        let end_flag = 0;
+
+        //미완료 => 완료
+        if(todoCk){
+            end_flag = 1;
+        }
+
+        const link = "/api/todo/end/"+id;
+        $.ajax({
+            url: link,
+            dataType: 'json',
+            type: 'PUT',
+            data: {
+                end_flag: end_flag
+            },
+            success: function(result) {
+                console.log(result);
+                if(!result.ok){
+                    alert(result.msg);
+                    return;
+                }
+                //다시 그리기
+                getList();
+            }
+            , fail: function(err){
+                console.log(err);
+            }
+        });
     });
 };
 
@@ -137,6 +193,8 @@ const getList = () => {
                 alert(result.err);
                 return;
             }
+
+            LIST = result.data;
             //다시 그리기
             reDraw(result.data)
         }
@@ -158,11 +216,13 @@ const reDraw = (data) => {
             <li class="list-group-item">
                 <div class="todo-item row" data-id="${now.id}"> 
                     <div class="form-check-label todo-top col-10"> 
-                        <input class="checkbox todo-ck" type="checkbox"> 
+                        <input class="checkbox todo-ck" type="checkbox" ${now.end_flag? 'checked': ''}> 
                         <label class="todo-name">
                             ${now.name}
                         </label>
-                        <span class="badge badge-primary badge-pill">2021.05.09</span>
+                        <span class="badge badge-primary badge-pill">
+                            ${now.end_date? now.end_date : '-'}
+                        </span>
                     </div> 
                     <div class="col-2 todo-btn">
                         <span class="todo-edit">✏</span>
@@ -187,6 +247,18 @@ const reDraw = (data) => {
         list.append(html);
     }
 };
+
+const search = () => {
+    const value = $('.todo-search').val();
+    let reData = [];
+    for(i=0;i<LIST.length;i++){
+        if(LIST[i].name.indexOf(value) > -1){
+            reData.push(LIST[i]);
+        }
+    }
+
+    reDraw(reData);
+}
 
 $( document ).ready(function() {
     $('#datetimepicker').datetimepicker({ format: 'L' });  
