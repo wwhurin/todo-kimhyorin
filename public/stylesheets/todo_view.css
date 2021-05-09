@@ -17,3 +17,9 @@
 .todo-name button{
     display: inline-block;
 }
+
+.todo-end-text{
+    text-decoration: line-through;
+    color: gray;
+    font-style: italic;
+}

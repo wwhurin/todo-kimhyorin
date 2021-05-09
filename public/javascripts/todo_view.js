@@ -217,7 +217,7 @@ const reDraw = (data) => {
                 <div class="todo-item row" data-id="${now.id}"> 
                     <div class="form-check-label todo-top col-10"> 
                         <input class="checkbox todo-ck" type="checkbox" ${now.end_flag? 'checked': ''}> 
-                        <label class="todo-name">
+                        <label class="todo-name ${now.end_flag? 'todo-end-text': ''}">
                             ${now.name}
                         </label>
                         <span class="badge badge-primary badge-pill">
