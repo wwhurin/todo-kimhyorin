@@ -3,10 +3,11 @@
 목표 기능
 
 - [x] TODO LIST 띄우기/갱신하기
-- [x] TODO 수정하기
+- [x] TODO 수정하기 (이름, 완료상태)
 - [x] TODO 삭제하기
 - [x] TODO 등록하기
 - [x] TODO 검색하기
+- [x] TODO 수정/등록일 표시 (YYYY-MM-DD)
 - [ ] TODO 태그하기
 - [ ] TODO 페이징 하기
 
