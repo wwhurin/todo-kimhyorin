@@ -31,6 +31,9 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+// model을 sequelize에 연결해주는 코드
+db.todo_list = require('./todo_list')(sequelize, Sequelize);
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
