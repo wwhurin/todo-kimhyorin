@@ -1,0 +1,19 @@
+.todo-btn{
+    text-align: right;
+}
+
+.todo-date{
+    margin-right: 15px;
+    margin-left: 15px;
+    color: gray;
+    font-size: small;
+}
+
+.todo-name input{
+    display: inline-block;
+    width: auto;
+}
+
+.todo-name button{
+    display: inline-block;
+}

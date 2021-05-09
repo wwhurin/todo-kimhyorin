@@ -1,0 +1,9 @@
+{
+  "development": {
+    "username": "",
+    "password": "",
+    "database": "main",
+    "storage": "../todo_db.db",
+    "dialect": "sqlite"
+  }
+}
