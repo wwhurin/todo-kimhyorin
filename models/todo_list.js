@@ -1,12 +1,16 @@
 module.exports = function(sequelize, DataTypes){
     let todo_list = sequelize.define("todo_list", {
-        userID: {
+        id: {
             filed: "id"
             , type: DataTypes.INTEGER
             , primaryKey: true
             , unique: true
             , autoIncrement: true
             , allowNull: false
+        }
+        , name: {
+            field: "name"
+            , type: DataTypes.TEXT
         }
         , wrt_date: {
             field: "wrt_date"

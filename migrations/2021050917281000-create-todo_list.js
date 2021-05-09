@@ -2,13 +2,17 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable("todo_list", {
-        userID: {
+        id: {
             filed: "id"
             , type: Sequelize.INTEGER
             , primaryKey: true
             , unique: true
             , autoIncrement: true
             , allowNull: false
+        }
+        , name: {
+            field: "name"
+            , type: Sequelize.TEXT
         }
         , wrt_date: {
             field: "wrt_date"
