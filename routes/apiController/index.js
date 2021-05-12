@@ -10,7 +10,13 @@ router.get("/", (req, res) => {
     res.send("Hello World");
 });
 
-//todo select
+/*
+
+todo select
+- Method : GET
+- Param : 
+
+*/
 router.get("/todo", (req, res) => {
     let ok = true;
    
@@ -40,7 +46,14 @@ router.get("/todo", (req, res) => {
       });
 });
 
-//todo create
+
+/*
+
+todo create
+- Method : POST
+- Param : name, end_date
+
+*/
 router.post("/todo", (req, res) => {
     let body = req.body;
     let ok = true, msg = '';
@@ -78,7 +91,15 @@ router.post("/todo", (req, res) => {
     });
 });
 
-//todo name edit
+
+/*
+
+todo update
+- Method : PUT
+- Param : [params] - id
+          [body] - name
+
+*/
 router.put("/todo/:id", (req, res) => {
     let params = req.params;
     let body = req.body;
@@ -103,6 +124,7 @@ router.put("/todo/:id", (req, res) => {
         });
     }
 
+    //TODO: 다른 TODO TAG시 함께 업데이트 
     models.todo_list.update({
         name: body.name
         , edit_date: today.format('YYYY-MM-DD')
@@ -128,7 +150,14 @@ router.put("/todo/:id", (req, res) => {
     
 });
 
-//todo remove(update flag)
+
+/*
+
+todo remove(update flag)
+- Method : DELETE
+- Param : [params] - id
+
+*/
 router.delete("/todo/:id", (req, res) => {
     let params = req.params;
 
@@ -167,7 +196,15 @@ router.delete("/todo/:id", (req, res) => {
     
 });
 
-//todo name edit
+
+/*
+
+todo update end flag
+- Method : PUT
+- Param : [params] - id
+          [body] - end_flag
+
+*/
 router.put("/todo/end/:id", (req, res) => {
     let params = req.params;
     let body = req.body;
