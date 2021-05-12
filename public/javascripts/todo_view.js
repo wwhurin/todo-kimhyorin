@@ -181,6 +181,7 @@ const btnHandler = () => {
     });
 };
 
+//todo list 받아오는 함수
 const getList = () => {
     const link = "/api/todo";
     $.ajax({
@@ -204,7 +205,41 @@ const getList = () => {
     });
 }
 
-//TODO: 갱신 시 다시 list 받아와 그리는 함수
+//태그 리스트 받아와서 
+const tagList = (listString, data) => {
+    let listArr = [], resultArr = [], resultString = '';
+
+    //태그 된 항목 없을 경우 예외처리
+    if(listString === '' || !listString){
+        return false;
+    }
+
+    if(listString.indexOf(',') !== -1){
+        listArr = listString.split(',');
+    }
+    
+    for(let i=0; i<listArr.length; i++){
+        for(let j=0; j<data.length; j++){
+            if(data[j]['id']*1 === listArr[i]*1){
+                resultArr.push(data[j]['name']);
+            }
+        }
+    }
+    
+    resultString = resultArr.reduce((str, val, index) => {
+        str += "@" + val;
+        
+        if(index !== resultArr.length-1){
+            str += ',';
+        }
+
+        return str;
+    }, '');
+
+    return resultString;
+}
+
+//갱신 시 다시 list 받아와 그리는 함수
 const reDraw = (data) => {
     const list = $(".list-group");
     list.html('');
@@ -212,6 +247,10 @@ const reDraw = (data) => {
     let html = '';
     for(let i=0; i<data.length; i++){
         const now = data[i];
+
+        //tag list 만들기
+        now.tagList = tagList(now.tag_todo, data);
+
         html = `
             <li class="list-group-item">
                 <div class="todo-item row" data-id="${now.id}"> 
@@ -239,6 +278,11 @@ const reDraw = (data) => {
                         <span class="orm-check-label todo-make">
                             ${now.edit_date ? now.edit_date : '-'}
                         </span>
+                    </div>
+
+                    <div class="todo-tag" style="display: ${now.tagList ? 'block' : 'none'}">
+                        <span class="badge badge-pill badge-secondary">TAG</span>
+                        <span>${now.tagList}</span>
                     </div>
                 </div> 
             </li>

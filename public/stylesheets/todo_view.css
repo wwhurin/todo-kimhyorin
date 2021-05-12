@@ -7,6 +7,7 @@
     margin-left: 15px;
     color: gray;
     font-size: small;
+    width: 100%;
 }
 
 .todo-name input{
@@ -22,4 +23,11 @@
     text-decoration: line-through;
     color: gray;
     font-style: italic;
+}
+
+.todo-tag{
+    margin-right: 15px;
+    margin-left: 15px;
+    color: gray;
+    font-size: small;
 }
