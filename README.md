@@ -37,5 +37,64 @@ FrontEnd: ejs, BootStrap, JQuery
 - tag_todo : tag한 TODO 기록하는 컬럼.
 
 
+# 폴더 구조
+```
+📂bin
+┃ ┗ 📜www
+┣ 📂config
+┃ ┗ 📜config.json
+┣ 📂migrations
+┃ ┗ 📜2021050917281000-create-todo_list.js
+┣ 📂models
+┃ ┣ 📜index.js
+┃ ┗ 📜todo_list.js
+┣ 📂public
+┃ ┣ 📂images
+┃ ┣ 📂javascripts
+┃ ┃ ┗ 📜todo_view.js
+┃ ┗ 📂stylesheets
+┃ ┃ ┣ 📜style.css
+┃ ┃ ┗ 📜todo_view.css
+┣ 📂routes
+┃ ┣ 📂apiController
+┃ ┃ ┗ 📜index.js
+┃ ┣ 📂viewController
+┃ ┃ ┗ 📜index.js
+┃ ┗ 📜index.js
+┣ 📂seeders
+┣ 📂views
+┃ ┣ 📜error.ejs
+┃ ┗ 📜index.ejs
+┣ 📜.gitignore
+┣ 📜app.js
+┣ 📜package-lock.json
+┣ 📜package.json
+┣ 📜README.md
+┗ 📜todo_db.db
+ 
+ ```
+- models : sequelize 세팅과 table 모델이 담겨 있습니다.
+- routes : view와 api의 router가 담겨 있습니다. 
+- view : ejs 파일이 담겨 있습니다.
+- public : js, image, css 파일이 담겨 있습니다.
+
+
+# api 리스트
+```
+모든 api들은 /api 로 시작됩니다.
+```
+
+1. [GET] /todo - 삭제되지 않은 todo list를 받아옵니다.
+
+2. [POST] /todo - todo를 신규 생성합니다.
+
+3. [PUT] /todo/:id - todo의 id값을 받아 해당 todo의 이름을 업데이트 합니다. 업데이트 시간도 함께 기록합니다.
+
+4. [DELETE] /todo/:id - todo의 id값을 받아 해당 todo의 use_flag를 변경합니다. update를 진행하나 삭제와 동일한 의미로 사용하므로 DELETE로 구현했습니다.
+
+5. [PUT] /todo/end/:id - todo의 id값을 받아 해당 todo를 완료처리 합니다. 완료된 시각도 함께 기록합니다.
+
+
+
 # 실행 화면
 ![report_gif](https://user-images.githubusercontent.com/26541563/117570698-52159b80-b106-11eb-83f3-b7cfc3964e2c.gif)
