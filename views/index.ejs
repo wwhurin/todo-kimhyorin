@@ -17,7 +17,7 @@
 <body>
     <h1>TODO</h1>
     <div class="head row form-group">
-        <div class="col-8">
+        <div class="col-7">
             <input type="text" class="form-control todo-new" placeholder="TODO를 입력해주세요.">
         </div>
 
@@ -30,7 +30,8 @@
             </div> 
         </div>
 
-        <div class="col-1">
+        <div class="col-2">
+            <button type="button" class="btn btn-outline-primary todo-add-tag" data-toggle="modal" data-target="#todo-tag-popup">TAG</button>
             <button type="button" class="btn btn-outline-primary todo-add">ADD</button>
         </div>
     </div>
@@ -78,11 +79,34 @@
             </li>
         </ul>
     </div>
+  
+    <!-- Modal -->
+    <div class="modal fade" id="todo-tag-popup" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">TAG 추가하기</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body list-group">
+            
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+        </div>
+    </div>
 
 </body>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script type="text/javascript" src="/javascripts/todo_view.js"></script>
 </html>
