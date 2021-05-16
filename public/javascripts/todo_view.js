@@ -163,6 +163,31 @@ const btnHandler = () => {
         //미완료 => 완료
         if(todoCk){
             end_flag = 1;
+
+            //tag 완료 여부 체크
+            let endTagCk = true;
+            const nowData = LIST.reduce((acc, val) => {
+                if(val['id'] === id) acc = val['tag_todo'];
+                return acc;
+            }, '');
+            
+            if(nowData){ //tag 된 항목 있을 경우 
+                const tagArr = nowData.split(',');
+                for(let i=0; i<LIST.length; i++){
+                    if(tagArr.indexOf(LIST[i]['id']+"") !== -1){
+                        if(LIST[i]['end_flag'] === 0 || LIST[i]['end_flag'] === null){
+                            endTagCk = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if(!endTagCk){
+                alert('태그 된 TODO가 끝나야 완료 가능합니다.');
+                $(this).prop("checked", false);
+                return;
+            }
         }
 
         const link = "/api/todo/end/"+id;
@@ -229,7 +254,7 @@ const tagList = (listString, data) => {
     for(let i=0; i<listArr.length; i++){
         for(let j=0; j<data.length; j++){
             if(data[j]['id']*1 === listArr[i]*1){
-                resultArr.push(data[j]['name']);
+                resultArr.push(data[j]['id']+"/"+data[j]['name']);
             }
         }
     }
