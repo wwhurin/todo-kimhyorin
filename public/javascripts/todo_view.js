@@ -18,6 +18,13 @@ const btnHandler = () => {
         const name = $('.todo-new').val();
         let dateStr = $('.todo-end').val();
 
+        //태그 리스트 얻어오기
+        let tagIdArr = [];
+        $('.tag-view span').each(function() {
+            const id = $(this).data('id');
+            tagIdArr.push(id);
+        });
+        const tagId = tagIdArr.join(',');
         if(!name){
             alert("TODO 이름을 입력해주세요.");
             return;
@@ -45,6 +52,7 @@ const btnHandler = () => {
             type: 'POST',
             data: {
                 name: name
+                , tag_todo: tagId
                 , end_date: dateStr
             },
             success: function(result) {
@@ -304,8 +312,80 @@ const search = () => {
     reDraw(reData);
 }
 
+const popup = () => {
+    const popup = $("#todo-tag-popup .tag-list");
+    popup.html('');
+
+    let html = '';
+    for(let i=0; i<LIST.length; i++){
+        const now = LIST[i];
+
+        html = `
+            <li class="list-group-item">
+            <div class="todo-item row" data-id="${now.id}"> 
+                <div class="form-check-label todo-top col-12"> 
+                    <input class="checkbox tag-yn" type="checkbox"> 
+                    <label class="todo-name ${now.end_flag? 'todo-end-text': ''}">
+                        ${now.name}
+                    </label>
+                    <span class="badge badge-primary badge-pill">
+                        ${now.end_date? now.end_date : '-'}
+                    </span>
+                </div> 
+
+                <div class="todo-date">
+                    <span class="badge badge-pill badge-secondary">MAKE</span>
+                    <span class="orm-check-label todo-make">
+                        ${now.wrt_date? now.wrt_date : '-'}
+                    </span>
+                    &nbsp;
+                    <span class="badge badge-pill badge-secondary">EDIT</span>
+                    <span class="orm-check-label todo-make">
+                        ${now.edit_date ? now.edit_date : '-'}
+                    </span>
+                </div>
+
+                <div class="todo-tag" style="display: ${now.tagList ? 'block' : 'none'}">
+                    <span class="badge badge-pill badge-secondary">TAG</span>
+                    <span>${now.tagList}</span>
+                </div>
+            </div> 
+            </li>
+        `;
+
+        popup.append(html);
+    }
+}
+
+const popup_close = () => {
+    let arrName = [];
+    let arrId = [];
+    $('.tag-list input[type="checkbox"]:checked').each(function() {
+        const name = $(this).closest('.todo-item').find('.todo-name').text();
+        const id = $(this).closest('.todo-item').data('id');
+        arrId.push(id)
+        arrName.push(name);
+    });
+
+    const list = $('.tag-view');
+    list.html('');
+
+    let html = '';
+    for(let i=0; i<arrName.length; i++){
+        html = `<span class="badge badge-dark" data-id="${arrId[i]}">${arrName[i]}</span>&nbsp;`
+        list.append(html);
+    }
+}
+
 $( document ).ready(function() {
     $('#datetimepicker').datetimepicker({ format: 'L' });  
+    $('#todo-tag-popup').on('show.bs.modal', function (e) {
+        popup();
+    });
+
+    $(document).on("click", "#tood-tag-add-view", function(){
+        popup_close();
+    })
 
     getList();
     btnHandler();

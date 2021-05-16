@@ -69,11 +69,11 @@ router.post("/todo", (req, res) => {
     
     models.todo_list.create({
         name: body.name
+        , tag_todo: body.tag_todo
         , wrt_date: today.format('YYYY-MM-DD')
         , end_date: body.end_date
     })
     .then( result => {
-        console.log(result);
         msg = "데이터 추가 완료";
         return res.json({
             ok
