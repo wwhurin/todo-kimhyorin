@@ -1,5 +1,3 @@
-let LIST = null;
-
 const btnHandler = () => {
     //input으로 바꿀 경우 true, 다시 text일 경우 false
     let editType = true;
@@ -230,7 +228,8 @@ const getList = () => {
 
             LIST = result.data;
             //다시 그리기
-            reDraw(result.data)
+            reDraw(result.data);
+            pagination(result.data.length, result.data);
         }
         , fail: function(err){
             console.log(err);
@@ -272,13 +271,18 @@ const tagList = (listString, data) => {
     return resultString;
 }
 
-//갱신 시 다시 list 받아와 그리는 함수
+//list 받아와 그리는 함수
 const reDraw = (data) => {
     const list = $(".list-group");
     list.html('');
 
-    let html = '';
-    for(let i=0; i<data.length; i++){
+    let html = ''; 
+
+    //url 페이지 예외처리 
+    if(Math.ceil(data.length/5) < page) location.href = '/1';
+
+    for(let i=(page*5) - 5; i<(page*5); i++){
+        if(i === data.length) break;
         const now = data[i];
 
         //tag list 만들기
@@ -325,6 +329,33 @@ const reDraw = (data) => {
     }
 };
 
+const pagination = (len, data) => {
+    const pagination = $('.pagination');
+    let html = '', cnt = 0;
+
+    pagination.html('');
+    for(cnt=1; cnt<=parseInt(len/5); cnt++){
+        html = `<li class="page-item ${cnt === 1 ? 'active' : ''}"><a class="page-link" data-page="${cnt}">${cnt}</a></li>`;
+        pagination.append(html);
+    }
+
+    if(len%5 !== 0){
+        html = `<li class="page-item ${cnt === 1 ? 'active' : ''}"><a class="page-link" data-page="${cnt}">${cnt}</a></li>`;
+        pagination.append(html);
+    }
+
+    $('.page-link').click(function(){
+        const thisPage = $(this).data('page');
+
+        $('.page-item').removeClass("active");
+        
+        $(this).closest('li').addClass("active");
+        page = thisPage;
+        reDraw(data);
+        history.pushState(null, null, `/${thisPage}`);
+    })
+}
+
 const search = () => {
     const isEnd = $('input[name="is_end"]:checked').val();
     const value = $('.todo-search').val();
@@ -338,6 +369,7 @@ const search = () => {
     console.log(isEnd)
     if(+isEnd === 2){
         reDraw(reData);
+        pagination(reData.length, reData);
         return;
     }
 
@@ -347,6 +379,7 @@ const search = () => {
     }, []);
 
     reDraw(reData);
+    pagination(reData.length, reData);
 }
 
 const popup = () => {
