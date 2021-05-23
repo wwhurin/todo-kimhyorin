@@ -7,9 +7,17 @@ const btnHandler = () => {
 
     //검색 이벤트 ========================================================
     btnSearch.click(function() {
-        console.log("search")
         search();
     });
+
+    //태그 팝업 이벤트 ===================================================
+    $('#todo-tag-popup').on('show.bs.modal', function (e) {
+        popup();
+    });
+
+    $(document).on("click", "#tood-tag-add-view", function(){
+        popup_close();
+    })
 
     //등록 이벤트 ========================================================
     btnAdd.click(function() {
@@ -23,6 +31,8 @@ const btnHandler = () => {
             tagIdArr.push(id);
         });
         const tagId = tagIdArr.join(',');
+
+        //예외처리
         if(!name){
             alert("TODO 이름을 입력해주세요.");
             return;
@@ -30,6 +40,17 @@ const btnHandler = () => {
 
         if(!dateStr){
             alert("종료 날짜를 입력해주세요.");
+            return;
+        }
+
+        let now = new Date();
+        const nowY = now.getFullYear();
+        const nowM = now.getMonth()+1;
+        const nowD = now.getDate();
+        now = new Date(`${nowY}-${nowM}-${nowD}`);
+        const date = new Date(dateStr);
+        if(date < now){
+            alert("종료 날짜는 오늘보다 작을 수 없습니다.");
             return;
         }
         
@@ -246,10 +267,12 @@ const tagList = (listString, data) => {
         return false;
     }
 
-    if(listString.indexOf(',') !== -1){
-        listArr = listString.split(',');
-    }
+    //태그 목록 만들기
+    if(listString.indexOf(',') !== -1) listArr = listString.split(',');
+    else listArr[0] = listString;
+
     
+    //태그된 TODO명 가져오기
     for(let i=0; i<listArr.length; i++){
         for(let j=0; j<data.length; j++){
             if(data[j]['id']*1 === listArr[i]*1){
@@ -258,6 +281,7 @@ const tagList = (listString, data) => {
         }
     }
     
+    //출력을 위한 string 만들기
     resultString = resultArr.reduce((str, val, index) => {
         str += "@" + val;
         
@@ -329,50 +353,60 @@ const reDraw = (data) => {
     }
 };
 
+//페이징 함수
 const pagination = (len, data) => {
     const pagination = $('.pagination');
     let html = '', cnt = 0;
 
+    //하단 페이지 버튼 그리기 
+    //현재 url에 해당하는 페이지 버튼 active class 추가
     pagination.html('');
     for(cnt=1; cnt<=parseInt(len/5); cnt++){
-        html = `<li class="page-item ${cnt === 1 ? 'active' : ''}"><a class="page-link" data-page="${cnt}">${cnt}</a></li>`;
+        html = `<li class="page-item ${cnt === page ? 'active' : ''}"><a class="page-link" data-page="${cnt}">${cnt}</a></li>`;
         pagination.append(html);
     }
 
     if(len%5 !== 0){
-        html = `<li class="page-item ${cnt === 1 ? 'active' : ''}"><a class="page-link" data-page="${cnt}">${cnt}</a></li>`;
+        html = `<li class="page-item ${cnt === page ? 'active' : ''}"><a class="page-link" data-page="${cnt}">${cnt}</a></li>`;
         pagination.append(html);
     }
 
+    //페이지 클릭 시 pushstate로 링크 변경 및 현재 페이지 갱신 후 redraw
     $('.page-link').click(function(){
         const thisPage = $(this).data('page');
 
-        $('.page-item').removeClass("active");
+        $('.page-item').removeClass("active"); //페이지네이션 버튼 active 초기화
         
         $(this).closest('li').addClass("active");
-        page = thisPage;
+        page = thisPage; //페이지 갱신
+
         reDraw(data);
-        history.pushState(null, null, `/${thisPage}`);
+
+        history.replaceState(null, null, `/${thisPage}`); //주소 갱신
+        //검색했을 때 필터링 된 데이터 유지를 위해 replaceState 사용
     })
 }
 
+//검색 시 실행되는 함수. 검색 조건에 맞는 data 만든 후 redraw 
 const search = () => {
     const isEnd = $('input[name="is_end"]:checked').val();
     const value = $('.todo-search').val();
 
     let reData = [];
+
+    //TODO명 필터링
     for(i=0;i<LIST.length;i++){
         if(LIST[i].name.indexOf(value) > -1){
             reData.push(LIST[i]);
         }
     }
-    console.log(isEnd)
+
+    //완료여부 필터링
     if(+isEnd === 2){
         reDraw(reData);
         pagination(reData.length, reData);
         return;
     }
-
     reData = reData.reduce((acc, val) => { 
         if(+val.end_flag === +isEnd) acc.push(val);
         return acc;
@@ -382,6 +416,7 @@ const search = () => {
     pagination(reData.length, reData);
 }
 
+//태그하는 팝업 그리기
 const popup = () => {
     const popup = $("#todo-tag-popup .tag-list");
     popup.html('');
@@ -427,6 +462,7 @@ const popup = () => {
     }
 }
 
+//태그 팝업 닫힘 버튼 누를 시 태그 체크한 리스트 화면에 그려주기 
 const popup_close = () => {
     let arrName = [];
     let arrId = [];
@@ -449,13 +485,6 @@ const popup_close = () => {
 
 $( document ).ready(function() {
     $('#datetimepicker').datetimepicker({ format: 'L' });  
-    $('#todo-tag-popup').on('show.bs.modal', function (e) {
-        popup();
-    });
-
-    $(document).on("click", "#tood-tag-add-view", function(){
-        popup_close();
-    })
 
     getList();
     btnHandler();
