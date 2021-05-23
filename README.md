@@ -10,7 +10,7 @@
 - [x] TODO 수정/등록일 표시 (YYYY-MM-DD)
 - [x] TODO 태그하기
 - [x] TODO 페이징 하기
-- [ ] 기타 예외처리
+- [x] 기타 예외처리
 
 
 # 실행 방법 및 사용 기술
@@ -98,4 +98,12 @@ FrontEnd: ejs, BootStrap, JQuery
 
 
 # 실행 화면
-![report_gif](https://user-images.githubusercontent.com/26541563/117570698-52159b80-b106-11eb-83f3-b7cfc3964e2c.gif)
+
+1. 추가 및 태그하기
+![add_gif](https://user-images.githubusercontent.com/26541563/119268743-490cea00-bc2f-11eb-9887-0315409f31c9.gif)
+
+2. 수정, 삭제, 완료하기
+![mod_gif](https://user-images.githubusercontent.com/26541563/119268769-5fb34100-bc2f-11eb-8076-31402b1c754d.gif)
+
+3. 검색하기 
+![search_gif](https://user-images.githubusercontent.com/26541563/119268820-98531a80-bc2f-11eb-82e3-03fbc439328b.gif)
