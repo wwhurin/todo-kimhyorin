@@ -326,13 +326,25 @@ const reDraw = (data) => {
 };
 
 const search = () => {
+    const isEnd = $('input[name="is_end"]:checked').val();
     const value = $('.todo-search').val();
+
     let reData = [];
     for(i=0;i<LIST.length;i++){
         if(LIST[i].name.indexOf(value) > -1){
             reData.push(LIST[i]);
         }
     }
+    console.log(isEnd)
+    if(+isEnd === 2){
+        reDraw(reData);
+        return;
+    }
+
+    reData = reData.reduce((acc, val) => { 
+        if(+val.end_flag === +isEnd) acc.push(val);
+        return acc;
+    }, []);
 
     reDraw(reData);
 }
