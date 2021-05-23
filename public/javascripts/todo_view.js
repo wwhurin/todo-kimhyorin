@@ -303,7 +303,9 @@ const reDraw = (data) => {
     let html = ''; 
 
     //url 페이지 예외처리 
-    if(Math.ceil(data.length/5) < page) location.href = '/1';
+    if(Math.ceil(data.length/5) < page){
+        return;
+    }
 
     for(let i=(page*5) - 5; i<(page*5); i++){
         if(i === data.length) break;
